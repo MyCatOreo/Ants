@@ -5,4 +5,7 @@ import App from "./components/App";
 
 import "./index.scss";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  React.createElement(App, null, null),
+  document.getElementById("root")
+);

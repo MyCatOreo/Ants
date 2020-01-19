@@ -5,10 +5,10 @@ import { simulate } from "../simulation";
 
 const App: React.FC = () => {
   return (
-    <main className="App">
+    <>
       <button onClick={simulate}>Simulate</button>
       <Map></Map>
-    </main>
+    </>
   );
 };
 

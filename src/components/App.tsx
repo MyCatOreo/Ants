@@ -36,6 +36,7 @@ const App: React.FC = () => {
   return (
     <AppStateContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
+        <button onClick={() => simulate(state, dispatch)}>Simulate</button>
         <RandomAnt />
         <Map />
       </AppDispatchContext.Provider>

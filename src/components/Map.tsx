@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
+
+import { useAppReducer } from "./App";
 
 import styles from "./Map.module.scss";
 
@@ -11,8 +13,8 @@ function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
 }
 
 const Map: React.FC = () => {
-  const [ants, setAnts] = useState<Ant[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [{ ants }, dispatch] = useAppReducer();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,7 +29,7 @@ const Map: React.FC = () => {
   }, [ants, canvasRef]);
 
   function spawnAnt(ant: Ant) {
-    setAnts([...ants, ant]);
+    dispatch({ type: "addAnt", ant });
   }
 
   function handleRandomAnt() {

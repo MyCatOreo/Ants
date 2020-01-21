@@ -1,6 +1,7 @@
 import React, { useContext, useReducer } from "react";
 
 import Map from "./Map";
+import RandomAnt from "./RandomAnt";
 import { simulate } from "../simulation";
 
 const initialAppState: AppState = {
@@ -23,10 +24,12 @@ export function useAppState(): AppState {
   return useContext(AppStateContext);
 }
 
+export function useAppDispatch(): React.Dispatch<AppAction> {
+  return useContext(AppDispatchContext);
+}
+
 export function useAppReducer(): [AppState, React.Dispatch<AppAction>] {
-  const state = useAppState();
-  const dispatch = useContext(AppDispatchContext);
-  return [state, dispatch];
+  return [useAppState(), useAppDispatch()];
 }
 
 const App: React.FC = () => {
@@ -35,8 +38,8 @@ const App: React.FC = () => {
   return (
     <AppStateContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
-        <button onClick={simulate}>Simulate</button>
-        <Map></Map>
+        <RandomAnt />
+        <Map />
       </AppDispatchContext.Provider>
     </AppStateContext.Provider>
   );

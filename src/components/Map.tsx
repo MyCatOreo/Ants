@@ -4,8 +4,8 @@ import { useAppReducer } from "./App";
 
 import styles from "./Map.module.scss";
 
-const WIDTH = 100;
-const HEIGHT = 100;
+export const WIDTH = 100;
+export const HEIGHT = 100;
 const SCALE = 5;
 
 function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
@@ -28,41 +28,26 @@ const Map: React.FC = () => {
     }
   }, [ants, canvasRef]);
 
-  function spawnAnt(ant: Ant) {
-    dispatch({ type: "addAnt", ant });
-  }
-
-  function handleRandomAnt() {
-    const newAnt = {
-      x: Math.floor(Math.random() * WIDTH),
-      y: Math.floor(Math.random() * HEIGHT)
-    };
-    spawnAnt(newAnt);
-  }
-
   function handleCanvasClick(e: React.MouseEvent) {
     const canvas = canvasRef.current;
     if (canvas) {
       const rect = canvas.getBoundingClientRect();
-      const newAnt = {
+      const ant = {
         x: Math.floor((e.clientX - rect.left) / SCALE),
         y: Math.floor((e.clientY - rect.top) / SCALE)
       };
-      spawnAnt(newAnt);
+      dispatch({ type: "addAnt", ant });
     }
   }
 
   return (
-    <>
-      <button onClick={handleRandomAnt}>Random Ant</button>
-      <canvas
-        ref={canvasRef}
-        className={styles.canvas}
-        width={WIDTH * SCALE}
-        height={WIDTH * SCALE}
-        onClick={handleCanvasClick}
-      ></canvas>
-    </>
+    <canvas
+      ref={canvasRef}
+      className={styles.canvas}
+      width={WIDTH * SCALE}
+      height={WIDTH * SCALE}
+      onClick={handleCanvasClick}
+    ></canvas>
   );
 };
 

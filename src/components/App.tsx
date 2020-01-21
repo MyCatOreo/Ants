@@ -16,19 +16,17 @@ function reducer(state: AppState, action: AppAction): AppState {
 }
 
 const AppStateContext = React.createContext(initialAppState);
-const AppDispatchContext = React.createContext<React.Dispatch<AppAction>>(
-  () => {}
-);
+const AppDispatchContext = React.createContext<AppDispatch>(() => {});
 
 export function useAppState(): AppState {
   return useContext(AppStateContext);
 }
 
-export function useAppDispatch(): React.Dispatch<AppAction> {
+export function useAppDispatch(): AppDispatch {
   return useContext(AppDispatchContext);
 }
 
-export function useAppReducer(): [AppState, React.Dispatch<AppAction>] {
+export function useAppReducer(): [AppState, AppDispatch] {
   return [useAppState(), useAppDispatch()];
 }
 

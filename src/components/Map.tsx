@@ -1,18 +1,17 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 import styles from "./Map.module.scss";
-import { useAnts } from "../ant";
 
 const WIDTH = 100;
 const HEIGHT = 100;
 const SCALE = 5;
 
-function useAntCanvas(): [
-  Ant[],
-  React.Dispatch<React.SetStateAction<Ant[]>>,
-  React.RefObject<HTMLCanvasElement>
-] {
-  const [ants, setAnts] = useAnts();
+function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
+  ctx.fillRect(ant.x * SCALE, ant.y * SCALE, SCALE, SCALE);
+}
+
+const Map: React.FC = () => {
+  const [ants, setAnts] = useState<Ant[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -26,16 +25,6 @@ function useAntCanvas(): [
       }
     }
   }, [ants, canvasRef]);
-
-  return [ants, setAnts, canvasRef];
-}
-
-function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
-  ctx.fillRect(ant.x * SCALE, ant.y * SCALE, SCALE, SCALE);
-}
-
-const Map: React.FC = () => {
-  const [ants, setAnts, canvasRef] = useAntCanvas();
 
   function spawnAnt(ant: Ant) {
     setAnts([...ants, ant]);

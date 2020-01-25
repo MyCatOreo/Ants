@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useAppState, useDispatch } from "./App";
 
 import styles from "./Map.module.scss";
 import { useAnts } from "../ant";
@@ -36,6 +37,7 @@ function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
 
 const Map: React.FC = () => {
   const [ants, setAnts, canvasRef] = useAntCanvas();
+  const lab = useAppState("lab");
 
   function spawnAnt(ant: Ant) {
     setAnts([...ants, ant]);
@@ -64,6 +66,7 @@ const Map: React.FC = () => {
   return (
     <>
       <button onClick={handleRandomAnt}>Random Ant</button>
+      test {lab.alpha} {lab.beta}
       <canvas
         ref={canvasRef}
         className={styles.canvas}

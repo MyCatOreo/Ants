@@ -1,4 +1,4 @@
-interface Ant {
-  x: number;
-  y: number;
-}
+// interface Ant {
+//   x: number;
+//   y: number;
+// }

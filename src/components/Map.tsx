@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { useAppState, useDispatch } from "./App";
+import { useAppState } from "./../contexts/state.context";
 
 import styles from "./Map.module.scss";
 import { useAnts } from "../ant";

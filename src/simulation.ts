@@ -1,3 +1,6 @@
+import { Dispatch } from "react";
+import { AppAction } from "./contexts/action";
+
 interface Edge {
   nodeA: string;
   nodeB: string;
@@ -11,7 +14,7 @@ interface Ant {
   food: boolean;
 }
 
-export function simulate() {
+export function simulate(dispatch: Dispatch<AppAction>, state: AppState) {
   const edges: Edge[] = [
     { nodeA: "A", nodeB: "B", t: 1, d: 2.3 },
     { nodeA: "A", nodeB: "C", t: 1, d: 1.1 },
@@ -194,10 +197,15 @@ export function simulate() {
       }
       message = message + " ";
     });
-    console.log(message);
+
+    dispatch({ type: "consoleLog", payload: message });
   });
+
   edges.forEach(edge => {
-    console.log("T" + edge.nodeA + edge.nodeB + ": " + edge.t);
+    let message = "T" + edge.nodeA + edge.nodeB + ": " + edge.t;
+    dispatch({ type: "consoleLog", payload: message });
   });
-  console.log("Total Food: " + totalFood);
+
+  let message = "Total Food: " + totalFood;
+  dispatch({ type: "consoleLog", payload: message });
 }

@@ -1,50 +1,50 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styles from "./Lab.module.scss";
 
-import { useAppState, useDispatch } from "./App";
+import { useAppState } from "./../contexts/state.context";
+import { useDispatch } from "./../contexts/dispatch.context";
 
 const Lab: React.FC = () => {
   const lab = useAppState("lab");
   const dispatch = useDispatch();
 
-  //DISPATCH
-  // const [numAnt, dispatchNumAnt] = useReducer(reducer, numAnt);
-
-  const testChange = (event: any) => {
-    dispatch({ type: "setBeta", payload: 3 });
+  //search me: handleInputChane
+  const handleNumAntChange = (event: any) => {
+    dispatch({ type: "setNumAnt", payload: event.target.value });
   };
-  //search me: how to use usecallback
+  const handleNumIterationChange = (event: any) => {
+    dispatch({ type: "setNumIteration", payload: event.target.value });
+  };
+
   const handleAlphaChange = (event: any) => {
     dispatch({ type: "setAlpha", payload: event.target.value });
   };
   const handleBetaChange = (event: any) => {
-    console.log("handle beta", event);
     dispatch({ type: "setBeta", payload: event.target.value });
   };
 
-  //  const [numAnt, setNumAnt] = useState(initialState.numAnt);
-  //  const [numInteration, setNumInteration] = useState(initialState.numInteration);
-  //  const [alpha, setAlpha] = useState(initialState.alpha);
-  //  const [beta, setBeta] = useState(initialState.beta);
-  //  const [Q, setQ] = useState(initialState.q);
-  //  const [rho, setRho] = useState(initialState.rho);
-
-  const handleChange = (event: any) => {
-    console.log(event.target.value);
+  const handleQChange = (event: any) => {
+    dispatch({ type: "setQ", payload: event.target.value });
+  };
+  const handleRhoChange = (event: any) => {
+    dispatch({ type: "setRho", payload: event.target.value });
   };
 
   return (
     <div className={styles.lab}>
-      {/* Number of ants <input type="number" value={numAnt}></input>
-      Number of interation <input type="number"></input> */}
+      Number of ants{" "}
+      <input
+        type="number"
+        value={lab.numAnt}
+        onChange={handleNumAntChange}
+      ></input>
+      Number of interation{" "}
+      <input
+        type="number"
+        value={lab.numIteration}
+        onChange={handleNumIterationChange}
+      ></input>
       <hr />
-      <li>
-        <button type="button" onClick={testChange}>
-          test
-        </button>
-
-        <input type="text" value={lab.beta} onChange={handleChange} />
-      </li>
       <li>
         Alpha (>=0)
         <input
@@ -63,12 +63,15 @@ const Lab: React.FC = () => {
         ></input>
         (the influence of the trail level)
       </li>
-      {/* <li>
-        Q <input type="number"></input>(pheromone amount)
+      <li>
+        Q <input type="number" value={lab.q} onChange={handleQChange}></input>
+        (pheromone amount)
       </li>
       <li>
-        Rho <input type="number"></input>(pheromone evaporation coefficient)
-      </li> */}
+        Rho{" "}
+        <input type="number" value={lab.rho} onChange={handleRhoChange}></input>
+        (pheromone evaporation coefficient)
+      </li>
       <hr />
       <a
         href="https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms"

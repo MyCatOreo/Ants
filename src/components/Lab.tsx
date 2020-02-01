@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styles from "./Lab.module.scss";
-
-import { useAppState, useDispatch } from "./App";
+import { useAppDispatch } from "../states/dispatch.context";
+import { useAppState } from "../states/state.context";
 
 const Lab: React.FC = () => {
-  const lab = useAppState("lab");
-  const dispatch = useDispatch();
+  const { lab } = useAppState();
+  const dispatch = useAppDispatch();
 
   //DISPATCH
   // const [numAnt, dispatchNumAnt] = useReducer(reducer, numAnt);
@@ -21,13 +21,6 @@ const Lab: React.FC = () => {
     console.log("handle beta", event);
     dispatch({ type: "setBeta", payload: event.target.value });
   };
-
-  //  const [numAnt, setNumAnt] = useState(initialState.numAnt);
-  //  const [numInteration, setNumInteration] = useState(initialState.numInteration);
-  //  const [alpha, setAlpha] = useState(initialState.alpha);
-  //  const [beta, setBeta] = useState(initialState.beta);
-  //  const [Q, setQ] = useState(initialState.q);
-  //  const [rho, setRho] = useState(initialState.rho);
 
   const handleChange = (event: any) => {
     console.log(event.target.value);

@@ -11,7 +11,7 @@ interface Ant {
   food: boolean;
 }
 
-export function simulate() {
+export function simulate(state: AppState, dispatch: AppDispatch) {
   const edges: Edge[] = [
     { nodeA: "A", nodeB: "B", t: 1, d: 2.3 },
     { nodeA: "A", nodeB: "C", t: 1, d: 1.1 },

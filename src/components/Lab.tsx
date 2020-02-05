@@ -1,12 +1,11 @@
 import React from "react";
 import styles from "./Lab.module.scss";
-
-import { useAppState } from "./../contexts/state.context";
-import { useDispatch } from "./../contexts/dispatch.context";
+import { useAppDispatch } from "../states/dispatch.context";
+import { useAppState } from "../states/state.context";
 
 const Lab: React.FC = () => {
-  const lab = useAppState("lab");
-  const dispatch = useDispatch();
+  const { lab, simulator } = useAppState();
+  const dispatch = useAppDispatch();
 
   //search me: handleInputChane
   const handleNumAntChange = (event: any) => {
@@ -35,13 +34,13 @@ const Lab: React.FC = () => {
       Number of ants{" "}
       <input
         type="number"
-        value={lab.numAnt}
+        value={simulator.numAnt}
         onChange={handleNumAntChange}
       ></input>
       Number of interation{" "}
       <input
         type="number"
-        value={lab.numIteration}
+        value={simulator.numIteration}
         onChange={handleNumIterationChange}
       ></input>
       <hr />

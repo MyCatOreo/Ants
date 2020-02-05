@@ -1,7 +1,10 @@
-import { AppAction } from "./action";
+import { useAppState } from "./state.context";
+import { useAppDispatch } from "./dispatch.context";
 
-export const reducer = (state: AppState, action: AppAction) => {
+export const appReducer = (state: AppState, action: AppAction) => {
   switch (action.type) {
+    case "addAnt":
+      return { ...state, ants: [...state.ants, action.ant] };
     case "setAlpha":
       return { ...state, lab: { ...state.lab, alpha: action.payload } };
     case "setBeta":
@@ -16,10 +19,12 @@ export const reducer = (state: AppState, action: AppAction) => {
       return { ...state, lab: { ...state.lab, numAnt: action.payload } };
     case "consoleLog": {
       if (action.payload) {
-        const newMessages = state.report.messages.concat(action.payload);
+        //  const newMessages = state.report.messages.concat(action.payload);
+        console.log("new", state.report.messages);
+        const test = ["hey", "yo"];
         return {
           ...state,
-          console: { ...state.report, messages: newMessages }
+          report: { ...state.report, messages: test }
         };
       }
     }
@@ -28,4 +33,7 @@ export const reducer = (state: AppState, action: AppAction) => {
   }
 };
 
-//export const useReducer = createContext(useReducer(reducer, {} as AppState));
+//search me
+export function useAppReducer(): [AppState, AppDispatch] {
+  return [useAppState(), useAppDispatch()];
+}

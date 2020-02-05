@@ -1,21 +1,22 @@
 import React, { useRef, useEffect } from "react";
-import { useAppState } from "./../contexts/state.context";
-
 import styles from "./Map.module.scss";
-import { useAnts } from "../ant";
+import { useAppState } from "../states/state.context";
+import { useAppDispatch } from "../states/dispatch.context";
 
-const WIDTH = 100;
-const HEIGHT = 100;
+export const WIDTH = 100;
+export const HEIGHT = 100;
 const SCALE = 5;
 
-function useAntCanvas(): [
-  Ant[],
-  React.Dispatch<React.SetStateAction<Ant[]>>,
-  React.RefObject<HTMLCanvasElement>
-] {
-  const [ants, setAnts] = useAnts();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
+  ctx.fillRect(ant.x * SCALE, ant.y * SCALE, SCALE, SCALE);
+}
 
+const Map: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { ants } = useAppState();
+  const dispatch = useAppDispatch();
+
+  //search me
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -28,53 +29,26 @@ function useAntCanvas(): [
     }
   }, [ants, canvasRef]);
 
-  return [ants, setAnts, canvasRef];
-}
-
-function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
-  ctx.fillRect(ant.x * SCALE, ant.y * SCALE, SCALE, SCALE);
-}
-
-const Map: React.FC = () => {
-  const [ants, setAnts, canvasRef] = useAntCanvas();
-  const lab = useAppState("lab");
-
-  function spawnAnt(ant: Ant) {
-    setAnts([...ants, ant]);
-  }
-
-  function handleRandomAnt() {
-    const newAnt = {
-      x: Math.floor(Math.random() * WIDTH),
-      y: Math.floor(Math.random() * HEIGHT)
-    };
-    spawnAnt(newAnt);
-  }
-
   function handleCanvasClick(e: React.MouseEvent) {
     const canvas = canvasRef.current;
     if (canvas) {
       const rect = canvas.getBoundingClientRect();
-      const newAnt = {
+      const ant = {
         x: Math.floor((e.clientX - rect.left) / SCALE),
         y: Math.floor((e.clientY - rect.top) / SCALE)
       };
-      spawnAnt(newAnt);
+      dispatch({ type: "addAnt", ant });
     }
   }
 
   return (
-    <>
-      <button onClick={handleRandomAnt}>Random Ant</button>
-      test {lab.alpha} {lab.beta}
-      <canvas
-        ref={canvasRef}
-        className={styles.canvas}
-        width={WIDTH * SCALE}
-        height={WIDTH * SCALE}
-        onClick={handleCanvasClick}
-      ></canvas>
-    </>
+    <canvas
+      ref={canvasRef}
+      className={styles.canvas}
+      width={WIDTH * SCALE}
+      height={WIDTH * SCALE}
+      onClick={handleCanvasClick}
+    ></canvas>
   );
 };
 

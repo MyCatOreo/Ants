@@ -4,32 +4,24 @@ import Map from "./Map";
 import Lab from "./Lab";
 import Report from "./Report";
 import { simulate } from "../simulation";
+import { initialAppState, useAppState } from "../states/state.context";
+import { useAppDispatch } from "../states/dispatch.context";
+import RandomAnt from "./RandomAnt";
+import { appReducer } from "../states/reducer";
+import AppProviders from "../appProviders";
 
-import { stateCtx } from "./../contexts/state.context";
-import { dispatchCtx } from "./../contexts/dispatch.context";
-
-import { reducer } from "./../contexts/reducer.context";
-import { initialState } from "./../contexts/state.context";
-
-export const Provider: React.ComponentType = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  return (
-    <dispatchCtx.Provider value={dispatch}>
-      <stateCtx.Provider value={state}>{children}</stateCtx.Provider>
-    </dispatchCtx.Provider>
-  );
-};
+export function useAppReducer(): [AppState, AppDispatch] {
+  return [useAppState(), useAppDispatch()];
+}
 
 const App: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const runSimulate = () => {
-    simulate(dispatch, state);
-  };
+  const [state, dispatch] = useReducer(appReducer, initialAppState);
 
   return (
-    <Provider>
+    <AppProviders>
       <div className="header">
-        <button onClick={runSimulate}>Simulate</button>
+        <RandomAnt />
+        <button onClick={() => simulate(state, dispatch)}>Simulate</button>
       </div>
       <div className="left">
         <Map></Map>
@@ -38,7 +30,7 @@ const App: React.FC = () => {
         <Lab></Lab>
         <Report></Report>
       </div>
-    </Provider>
+    </AppProviders>
   );
 };
 

@@ -6,4 +6,5 @@ type AppAction =
   | { type: "setBeta"; payload: number }
   | { type: "setQ"; payload: number }
   | { type: "setRho"; payload: number }
-  | { type: "consoleLog"; payload: string };
+  | { type: "consoleLog"; payload: string }
+  | { type: "consoleClear" };

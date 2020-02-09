@@ -36,6 +36,15 @@ export const appReducer = (state: AppState, action: AppAction) => {
       } else {
         return state;
       }
+    case "consoleClear": {
+      return {
+        ...state,
+        report: {
+          ...state.report,
+          messages: []
+        }
+      };
+    }
     default: {
       throw new Error(`Unhandled action type`);
     }

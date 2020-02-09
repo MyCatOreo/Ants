@@ -1,25 +1,25 @@
 import React from "react";
 import { useAppState } from "../states/state.context";
+import { useAppDispatch } from "../states/dispatch.context";
 
 const Report: React.FC = () => {
   const { report } = useAppState();
+  const dispatch = useAppDispatch();
 
   let messagesList = report.messages.map(m => {
-    return <p key="i">{m}</p>;
+    return <p>{m}</p>;
   });
 
-  let messagesList1 = (
-    <>
-      <p key="1">haha</p>
-      <p key="2">haha2</p>
-    </>
-  );
+  const addMessage = () => {
+    dispatch({ type: "consoleLog", payload: "hello world" });
+  };
 
   return (
     <>
       <h2>Report</h2>
+      <button onClick={addMessage}>test</button>
       {JSON.stringify(report)}
-      {messagesList1}
+      {messagesList}
     </>
   );
 };

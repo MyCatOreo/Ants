@@ -26,8 +26,14 @@ export const initialAppState: AppState = {
   }
 };
 
-export const AppStateContext = createContext(initialAppState);
+export const AppStateContext = createContext<AppState | undefined>(
+  initialAppState
+);
 
 export const useAppState = () => {
-  return useContext(AppStateContext);
+  const context = useContext(AppStateContext);
+  if (context === undefined) {
+    throw new Error("useAppState must be used within a AppStateProvider");
+  }
+  return context;
 };

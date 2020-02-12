@@ -1,4 +1,4 @@
 interface Message {
-  type: "info" | "game";
-  content: string;
+  type: "console" | "game";
+  message: string;
 }

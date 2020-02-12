@@ -197,14 +197,20 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
       message = message + " ";
     });
 
-    dispatch({ type: "consoleLog", payload: message });
+    dispatch({
+      type: "consoleLog",
+      payload: { type: "console", message: message }
+    });
   });
 
   edges.forEach(edge => {
     let message = "T" + edge.nodeA + edge.nodeB + ": " + edge.t;
-    dispatch({ type: "consoleLog", payload: message });
+    dispatch({
+      type: "consoleLog",
+      payload: { type: "console", message: message }
+    });
   });
 
   let message = "Total Food: " + totalFood;
-  dispatch({ type: "consoleLog", payload: message });
+  dispatch({ type: "consoleLog", payload: { type: "game", message: message } });
 }

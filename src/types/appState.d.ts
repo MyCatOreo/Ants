@@ -16,8 +16,7 @@ interface AppState {
   map: {};
   canvas: {};
   report: {
-    messages: string[];
-    //  messages: Message[];
+    messages: Message[];
   };
 }
 

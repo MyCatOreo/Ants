@@ -32,7 +32,6 @@ const Report: React.FC = () => {
 
   return (
     <div className={styles.report}>
-      {isGameDisplayed}
       <h2>Report</h2>
       <button onClick={toggleConsole}>
         {isConsoleDisplay ? "Console (x)" : "Console (+)"}

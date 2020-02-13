@@ -3,22 +3,23 @@ import React from "react";
 import Map from "./Map";
 import Lab from "./Lab";
 import Report from "./Report";
-import RandomAnt from "./RandomAnt";
 import AppProviders from "../appProviders";
+
+import Container from "@material-ui/core/Container";
+import Paper from "@material-ui/core/Paper";
 
 const App: React.FC = () => {
   return (
     <AppProviders>
-      <div className="header">
-        <RandomAnt />
-      </div>
-      <div className="left">
-        <Map></Map>
-      </div>
-      <div className="right">
-        <Lab></Lab>
-        <Report></Report>
-      </div>
+      <Container maxWidth="md">
+        <Paper>
+          <Map />
+        </Paper>
+        <Lab />
+        <Paper>
+          <Report />
+        </Paper>
+      </Container>
     </AppProviders>
   );
 };

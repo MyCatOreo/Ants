@@ -10,12 +10,10 @@ import { appReducer } from "./states/reducer";
 const AppProviders: React.ComponentType = ({ children }) => {
   //  const [state, dispatch] = useAppReducer();
   const [state, dispatch] = useReducer(appReducer, initialAppState);
-  const { lab } = useAppState();
 
   return (
     <AppStateContext.Provider value={state}>
       <AppDispatchContext.Provider value={dispatch}>
-        {lab.alpha}
         {children}
       </AppDispatchContext.Provider>
     </AppStateContext.Provider>

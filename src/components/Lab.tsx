@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import styles from "./Lab.module.scss";
+import clsx from "clsx";
 import { useAppState } from "../states/state.context";
 import { useAppReducer } from "../states/reducer";
 import { simulate } from "../simulation";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
+import Divider from "@material-ui/core/Divider";
+import TextField from "@material-ui/core/TextField";
 import PlayCircleFilledWhiteIcon from "@material-ui/icons/PlayCircleFilledWhite";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import RandomAnt from "./RandomAnt";
@@ -17,6 +20,28 @@ const Lab: React.FC = () => {
   const { lab, simulator } = useAppState();
   const [appState, appDispatch] = useAppReducer();
   const [expanded, setExpanded] = useState(false);
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      maxWidth: 345,
+      "& .MuiTextField-root": {
+        margin: theme.spacing(1),
+        width: 200
+      }
+    },
+    expand: {
+      transform: "rotate(0deg)",
+      marginLeft: "auto",
+      transition: theme.transitions.create("transform", {
+        duration: theme.transitions.duration.shortest
+      })
+    },
+    expandOpen: {
+      transform: "rotate(180deg)"
+    }
+  }));
+
+  const classes = useStyles();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -46,7 +71,96 @@ const Lab: React.FC = () => {
 
   return (
     <>
-      <Card>
+      <Card className={classes.root}>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <form noValidate autoComplete="off">
+              <TextField
+                id="number-of-ants"
+                label="Number of ants"
+                type="number"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                size="small"
+                value={simulator.numAnt}
+                onChange={handleNumAntChange}
+              />
+              <TextField
+                id="number-of-iteration"
+                label="Number of iteration"
+                type="number"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                size="small"
+                value={simulator.numIteration}
+                onChange={handleNumIterationChange}
+              />
+              <TextField
+                id="alpha"
+                label="Alpha (>=0)"
+                helperText="the influence of pheromone"
+                type="number"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                size="small"
+                value={lab.alpha}
+                onChange={handleAlphaChange}
+              />
+              <TextField
+                id="beta"
+                label="Beta (>=1)"
+                helperText="the influence of the trail level"
+                type="number"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                size="small"
+                value={lab.beta}
+                onChange={handleBetaChange}
+              />
+              <TextField
+                id="q"
+                label="Q"
+                helperText="the pheromone amount"
+                type="number"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                size="small"
+                value={lab.q}
+                onChange={handleQChange}
+              />
+              <TextField
+                id="rho"
+                label="Rho (>=0)"
+                helperText="pheromone evaporation coefficient"
+                type="number"
+                InputLabelProps={{
+                  shrink: true
+                }}
+                variant="outlined"
+                size="small"
+                value={lab.rho}
+                onChange={handleRhoChange}
+              />
+              <Divider variant="middle" />
+              <a
+                href="https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms"
+                target="blank"
+              >
+                Wikipedia - Ant colony optimization algorithms
+              </a>
+            </form>
+          </CardContent>
+        </Collapse>
         <CardActions disableSpacing>
           <IconButton
             aria-label="start simulator"
@@ -56,7 +170,9 @@ const Lab: React.FC = () => {
           </IconButton>
           <RandomAnt />
           <IconButton
-            className={styles.leftButton}
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded
+            })}
             onClick={handleExpandClick}
             aria-expanded={expanded}
             aria-label="show more"
@@ -64,69 +180,6 @@ const Lab: React.FC = () => {
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
-
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <div className={styles.lab}>
-              Number of ants{" "}
-              <input
-                type="number"
-                value={simulator.numAnt}
-                onChange={handleNumAntChange}
-              ></input>
-              Number of interation{" "}
-              <input
-                type="number"
-                value={simulator.numIteration}
-                onChange={handleNumIterationChange}
-              ></input>
-              <hr />
-              <li>
-                Alpha (>=0){lab.alpha}
-                <input
-                  type="number"
-                  value={lab.alpha}
-                  onChange={handleAlphaChange}
-                ></input>
-                (the influence of pheromone)
-              </li>
-              <li>
-                Beta (>=1){" "}
-                <input
-                  type="number"
-                  value={lab.beta}
-                  onChange={handleBetaChange}
-                ></input>
-                (the influence of the trail level)
-              </li>
-              <li>
-                Q{" "}
-                <input
-                  type="number"
-                  value={lab.q}
-                  onChange={handleQChange}
-                ></input>
-                (pheromone amount)
-              </li>
-              <li>
-                Rho{" "}
-                <input
-                  type="number"
-                  value={lab.rho}
-                  onChange={handleRhoChange}
-                ></input>
-                (pheromone evaporation coefficient)
-              </li>
-              <hr />
-              <a
-                href="https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms"
-                target="blank"
-              >
-                Wikipedia - Ant colony optimization algorithms
-              </a>
-            </div>
-          </CardContent>
-        </Collapse>
       </Card>
     </>
   );

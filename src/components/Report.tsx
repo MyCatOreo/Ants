@@ -16,7 +16,7 @@ const Report: React.FC = () => {
 
   const useStyles = makeStyles(theme => ({
     root: {
-      height: "400px",
+      height: "370px",
       padding: theme.spacing(3),
       "& .MuiFormControlLabel-root": {
         color: lightBlue[300]

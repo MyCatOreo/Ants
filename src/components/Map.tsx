@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import styles from "./Map.module.scss";
 import { useAppState } from "../states/state.context";
 import { useAppDispatch } from "../states/dispatch.context";
+import { makeStyles } from "@material-ui/core";
 
 export const WIDTH = 100;
 export const HEIGHT = 100;
@@ -15,6 +16,14 @@ const Map: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { ants } = useAppState();
   const dispatch = useAppDispatch();
+
+  const useStyles = makeStyles(theme => ({
+    root: {
+      margin: "auto",
+      display: "block"
+    }
+  }));
+  const classes = useStyles();
 
   //search me
   useEffect(() => {
@@ -37,6 +46,7 @@ const Map: React.FC = () => {
         x: Math.floor((e.clientX - rect.left) / SCALE),
         y: Math.floor((e.clientY - rect.top) / SCALE)
       };
+      //TODO (ly): callback operation
       dispatch({ type: "addAnt", ant });
     }
   }
@@ -44,7 +54,7 @@ const Map: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className={styles.canvas}
+      className={classes.root}
       width={WIDTH * SCALE}
       height={WIDTH * SCALE}
       onClick={handleCanvasClick}

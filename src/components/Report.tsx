@@ -27,6 +27,7 @@ const Report: React.FC = () => {
         marginRight: "22px"
       },
       "& .MuiContainer-root": {
+        //NOTE (LY): How to hide the scroll bar: https://stackoverflow.com/questions/16670931/hide-scroll-bar-but-while-still-being-able-to-scroll
         height: "100%",
         fontSize: "x-small",
         color: lightBlue[300],

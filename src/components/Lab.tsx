@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { useAppState } from "../states/state.context";
 import { useAppReducer } from "../states/reducer";
-import { simulate } from "../simulation";
+import { simulate } from "../controllers/map.simulator";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Card from "@material-ui/core/Card";

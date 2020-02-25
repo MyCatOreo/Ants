@@ -1,3 +1,5 @@
+import { MapGenerator } from "./map.generator";
+
 interface Edge {
   nodeA: string;
   nodeB: string;
@@ -12,6 +14,9 @@ interface Ant {
 }
 
 export function simulate(state: AppState, dispatch: AppDispatch) {
+  const mapGenerator = new MapGenerator();
+  mapGenerator.generateTestMapEdge();
+
   dispatch({ type: "consoleClear" });
 
   const edges: Edge[] = [

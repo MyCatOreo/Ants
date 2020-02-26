@@ -1,76 +1,45 @@
 import { MapGenerator } from "./map.generator";
 
-interface Edge {
-  nodeA: string;
-  nodeB: string;
-  t: number;
-  d: number;
-}
-
-interface Ant {
-  k: number;
-  path: string[];
-  food: boolean;
-}
-
 export function simulate(state: AppState, dispatch: AppDispatch) {
   const mapGenerator = new MapGenerator();
-  mapGenerator.generateTestMapEdge();
+  const { edges, nodes } = mapGenerator.generateTestMap(); //TODO: seperate pheromone from this output
+  const startNode = nodes[Math.floor(Math.random() * nodes.length)]; //TODO: move into map generator
+  const targetNode = nodes[Math.floor(Math.random() * nodes.length)];
 
   dispatch({ type: "consoleClear" });
-
-  const edges: Edge[] = [
-    { nodeA: "A", nodeB: "B", t: 1, d: 2.3 },
-    { nodeA: "A", nodeB: "C", t: 1, d: 1.1 },
-    { nodeA: "A", nodeB: "E", t: 1, d: 4.1 },
-    { nodeA: "B", nodeB: "D", t: 1, d: 0.4 },
-    { nodeA: "B", nodeB: "E", t: 1, d: 3.0 },
-    { nodeA: "B", nodeB: "G", t: 1, d: 9.1 },
-    { nodeA: "C", nodeB: "F", t: 1, d: 3.2 },
-    { nodeA: "C", nodeB: "P", t: 1, d: 4.8 },
-    { nodeA: "D", nodeB: "G", t: 1, d: 2.8 },
-    { nodeA: "D", nodeB: "N", t: 1, d: 0.3 },
-    { nodeA: "E", nodeB: "M", t: 1, d: 4.2 },
-    { nodeA: "E", nodeB: "O", t: 1, d: 3.2 },
-    { nodeA: "E", nodeB: "P", t: 1, d: 1.8 },
-    { nodeA: "F", nodeB: "J", t: 1, d: 4.2 },
-    { nodeA: "F", nodeB: "P", t: 1, d: 1.7 },
-    { nodeA: "G", nodeB: "H", t: 1, d: 1.8 },
-    { nodeA: "H", nodeB: "I", t: 1, d: 1.9 },
-    { nodeA: "H", nodeB: "N", t: 1, d: 0.1 },
-    { nodeA: "I", nodeB: "N", t: 1, d: 1.4 },
-    { nodeA: "I", nodeB: "Z", t: 1, d: 4.0 },
-    { nodeA: "J", nodeB: "K", t: 1, d: 3.9 },
-    { nodeA: "J", nodeB: "P", t: 1, d: 0.5 },
-    { nodeA: "K", nodeB: "L", t: 1, d: 7.1 },
-    { nodeA: "K", nodeB: "M", t: 1, d: 0.6 },
-    { nodeA: "L", nodeB: "M", t: 1, d: 2.1 },
-    { nodeA: "L", nodeB: "Z", t: 1, d: 1.8 },
-    { nodeA: "M", nodeB: "O", t: 1, d: 4.0 },
-    { nodeA: "M", nodeB: "Z", t: 1, d: 8.6 },
-    { nodeA: "N", nodeB: "O", t: 1, d: 1.0 },
-    { nodeA: "N", nodeB: "Z", t: 1, d: 10.2 }
-  ];
-
-  const startNode = "A";
-  const targetNode = "Z";
+  dispatch({
+    type: "consoleLog",
+    payload: {
+      type: "game",
+      message: "start point: (" + startNode.x + "," + startNode.y + ")"
+    }
+  });
+  dispatch({
+    type: "consoleLog",
+    payload: {
+      type: "game",
+      message: "target point: (" + targetNode.x + "," + targetNode.y + ")"
+    }
+  });
 
   const alpha = 1;
   const beta = 1;
   const Q = 1;
   const rho = 0.2;
-  const numAnt = 100;
-  const numInteration = 80;
+  const numAnt = 5;
+  const numInteration = 10;
 
   let totalFood = 0;
 
-  const ants: Ant[] = Array.from(Array(numAnt).keys()).map(k => ({
-    k,
+  const ants: Ant[] = Array.from(Array(numAnt).keys()).map(id => ({
+    id,
+    x: 50,
+    y: 50,
     path: [startNode],
     food: false
   }));
 
-  function getEdge(nodeOne: string, nodeTwo: string): Edge | undefined {
+  function getEdge(nodeOne: MapNode, nodeTwo: MapNode): MapEdge | undefined {
     return edges.find(
       edge =>
         (edge.nodeA === nodeOne && edge.nodeB === nodeTwo) ||
@@ -78,11 +47,11 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
     );
   }
 
-  function getConnectedEdges(node: string): Edge[] {
+  function getConnectedEdges(node: MapNode): MapEdge[] {
     return edges.filter(edge => edge.nodeA === node || edge.nodeB === node);
   }
 
-  function getOtherNode(node: string, edge: Edge): string | undefined {
+  function getOtherNode(node: MapNode, edge: MapEdge): MapNode | undefined {
     if (edge.nodeA === node) {
       return edge.nodeB;
     }
@@ -92,14 +61,14 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
   }
 
   function calculateP(
-    lastNode: string,
-    currentNode: string,
-    candidateNode: string
+    lastNode: MapNode,
+    currentNode: MapNode,
+    candidateNode: MapNode
   ): number {
     const edge = getEdge(currentNode, candidateNode);
 
     if (edge) {
-      const { t, d } = edge;
+      const { pheromone, distance } = edge;
       const connectedEdges = getConnectedEdges(currentNode);
       let allowedEdges = [];
 
@@ -115,9 +84,13 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
         allowedEdges = connectedEdges;
       }
 
-      const numerator = Math.pow(t, alpha) * Math.pow(1 / d, beta);
+      const numerator =
+        Math.pow(pheromone, alpha) * Math.pow(1 / distance, beta);
       const denominator = allowedEdges
-        .map(edge => Math.pow(edge.t, alpha) * Math.pow(1 / edge.d, beta))
+        .map(
+          edge =>
+            Math.pow(edge.pheromone, alpha) * Math.pow(1 / edge.distance, beta)
+        )
         .reduce((sum, current) => sum + current, 0);
 
       return numerator / denominator;
@@ -127,23 +100,23 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
   }
 
   //update pheromon on an edge
-  function updateT(edge: Edge) {
-    edge.t = edge.t * (1 - rho);
+  function updateT(edge: MapEdge) {
+    edge.pheromone = edge.pheromone * (1 - rho);
 
     ants.forEach(ant => {
       //all ants that has passed this edge
-      const lastEdge = getEdge(ant.path.slice(-1)[0], ant.path.slice(-2)[0]);
+      const lastEdge = getEdge(ant.path!.slice(-1)[0], ant.path!.slice(-2)[0]); //TODO: remove after refactor ant
       if (lastEdge === edge) {
-        // edge.t = edge.t + (Q * (ant.food ? 2 : 1)) / edge.d;
-        edge.t = edge.t + Q / edge.d;
+        // edge.pheromone = edge.pheromone + (Q * (ant.food ? 2 : 1)) / edge.d;
+        edge.pheromone = edge.pheromone + Q / edge.distance;
       }
     });
   }
 
   //move ant to the next node and update path
   function moveAnt(ant: Ant) {
-    const lastNode = ant.path.slice(-2)[0];
-    const currentNode = ant.path.slice(-1)[0];
+    const lastNode = ant.path!.slice(-2)[0]; //TODO: remove ! after refactor ant
+    const currentNode = ant.path!.slice(-1)[0]; //TODO: remove ! after refactor ant
     let choice = Math.random();
     const connectedEdges = getConnectedEdges(currentNode);
     let allowedEdges = [];
@@ -165,7 +138,7 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
       if (nextNode) {
         choice = choice - calculateP(lastNode, currentNode, nextNode);
         if (choice <= 0) {
-          ant.path.push(nextNode);
+          ant.path!.push(nextNode); //TODO: remove ! after refactor ant
 
           if (nextNode === targetNode) {
             ant.food = true;
@@ -190,9 +163,10 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
   }
 
   ants.forEach(ant => {
-    let message = "K" + ant.k + ": ";
-    ant.path.forEach(node => {
-      message = message + node;
+    let message = "K" + ant.id + ": ";
+    ant.path!.forEach(node => {
+      //TODO: remove ! after refactor ant
+      message = message + node.id;
       if (node === startNode) {
         message = message + "[Home]";
       }
@@ -208,13 +182,14 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
     });
   });
 
-  edges.forEach(edge => {
-    let message = "T" + edge.nodeA + edge.nodeB + ": " + edge.t;
-    dispatch({
-      type: "consoleLog",
-      payload: { type: "console", message: message }
-    });
-  });
+  //TODO lol... only loop the edges touched by ants
+  // edges.forEach(edge => {
+  //   let message = "T" + edge.nodeA.id + edge.nodeB.id + ": " + edge.pheromone;
+  //   dispatch({
+  //     type: "consoleLog",
+  //     payload: { type: "console", message: message }
+  //   });
+  // });
 
   let message = "Total Food: " + totalFood;
   dispatch({ type: "consoleLog", payload: { type: "game", message: message } });

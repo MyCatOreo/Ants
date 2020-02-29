@@ -1,11 +1,7 @@
 import { createContext, useContext } from "react";
 
-//Context is designed to share data that can be considered “global” for a tree of React components,
-// such as the current authenticated user, theme, or preferred language.
-//global state
-
 export const initialAppState: AppState = {
-  ants: [{ x: 10, y: 10 }],
+  ants: [],
   colony: {
     food: 0
   },
@@ -19,7 +15,10 @@ export const initialAppState: AppState = {
     numAnt: 80,
     numIteration: 80
   },
-  map: {},
+  map: {
+    nodes: [],
+    edges: []
+  },
   canvas: {},
   report: {
     messages: []

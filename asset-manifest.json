@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/MyCatOreo/Ants/static/css/main.095ea654.chunk.css",
+    "main.js": "/MyCatOreo/Ants/static/js/main.882b86fa.chunk.js",
+    "main.js.map": "/MyCatOreo/Ants/static/js/main.882b86fa.chunk.js.map",
+    "runtime-main.js": "/MyCatOreo/Ants/static/js/runtime-main.365eb30a.js",
+    "runtime-main.js.map": "/MyCatOreo/Ants/static/js/runtime-main.365eb30a.js.map",
+    "static/js/2.56cf7c2e.chunk.js": "/MyCatOreo/Ants/static/js/2.56cf7c2e.chunk.js",
+    "static/js/2.56cf7c2e.chunk.js.map": "/MyCatOreo/Ants/static/js/2.56cf7c2e.chunk.js.map",
+    "index.html": "/MyCatOreo/Ants/index.html",
+    "precache-manifest.d495db853067fc46619559847ea3ed5a.js": "/MyCatOreo/Ants/precache-manifest.d495db853067fc46619559847ea3ed5a.js",
+    "service-worker.js": "/MyCatOreo/Ants/service-worker.js",
+    "static/css/main.095ea654.chunk.css.map": "/MyCatOreo/Ants/static/css/main.095ea654.chunk.css.map",
+    "static/js/2.56cf7c2e.chunk.js.LICENSE": "/MyCatOreo/Ants/static/js/2.56cf7c2e.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.365eb30a.js",
+    "static/js/2.56cf7c2e.chunk.js",
+    "static/css/main.095ea654.chunk.css",
+    "static/js/main.882b86fa.chunk.js"
+  ]
+}

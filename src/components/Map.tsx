@@ -8,7 +8,7 @@ export const HEIGHT = 100;
 const SCALE = 5;
 
 function drawAnt(ctx: CanvasRenderingContext2D, ant: Ant) {
-  ctx.fillRect(ant.x * SCALE, ant.y * SCALE, SCALE, SCALE);
+  ctx.fillRect(ant.x * SCALE, ant.y * SCALE, 2, 2);
 }
 
 const Map: React.FC = () => {
@@ -37,7 +37,7 @@ const Map: React.FC = () => {
         x: Math.floor((e.clientX - rect.left) / SCALE),
         y: Math.floor((e.clientY - rect.top) / SCALE)
       };
-      dispatch({ type: "addAnt", ant });
+      dispatch({ type: "canvasAddAnt", ant });
     }
   }
 

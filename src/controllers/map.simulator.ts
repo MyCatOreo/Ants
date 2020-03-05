@@ -26,8 +26,8 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
   const beta = 1;
   const Q = 1;
   const rho = 0.2;
-  const numAnt = 5;
-  const numInteration = 10;
+  const numAnt = 10;
+  const numInteration = 20;
 
   let totalFood = 0;
 
@@ -144,6 +144,8 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
         choice = choice - _calculateP(lastNode, currentNode, nextNode);
         if (choice <= 0) {
           ant.path!.push(nextNode); //TODO: remove ! after refactor ant
+          ant.x = nextNode.x;
+          ant.y = nextNode.y;
 
           if (nextNode === targetNode) {
             ant.food = true;
@@ -156,12 +158,20 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
         }
       }
     }
+    dispatch({
+      type: "updateAnt",
+      payload: ant
+    });
   }
 
   // Main simulation loop
   let counter = 0; //  set your counter to 1
 
   function simulate() {
+    dispatch({
+      type: "updateAllAnts",
+      payload: ants
+    });
     //  create a loop function, pause in between an iteration
     setTimeout(t => {
       ants.forEach(ant => {
@@ -171,10 +181,6 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
         _updateT(edge, ants);
       });
       if (counter < numInteration) {
-        dispatch({
-          type: "consoleLog",
-          payload: { type: "console", message: "Iternation " + counter }
-        });
         simulate();
       } else if (counter === numInteration) {
         // Print result after simulation

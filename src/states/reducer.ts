@@ -3,8 +3,25 @@ import { useAppDispatch } from "./dispatch.context";
 
 export const appReducer = (state: AppState, action: AppAction) => {
   switch (action.type) {
-    case "addAnt":
+    case "canvasAddAnt":
       return { ...state, ants: [...state.ants, action.ant] };
+    case "updateAllAnts":
+      return { ...state, ants: action.payload };
+    case "updateAnt":
+      const targetAnt = state.ants.find(t => {
+        return t.id === action.payload.id;
+      });
+      if (targetAnt) {
+        const index = state.ants.indexOf(targetAnt);
+        const updated = [
+          ...state.ants.slice(0, index),
+          ...state.ants.slice(index + 1),
+          action.payload
+        ];
+        return { ...state, ants: updated };
+      } else {
+        return state;
+      }
     case "setAlpha":
       return { ...state, lab: { ...state.lab, alpha: action.payload } };
     case "setBeta":

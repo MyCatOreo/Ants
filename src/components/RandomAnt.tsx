@@ -14,7 +14,7 @@ const RandomAnt: React.FC = () => {
       x: Math.floor(Math.random() * WIDTH),
       y: Math.floor(Math.random() * HEIGHT)
     };
-    dispatch({ type: "addAnt", ant });
+    dispatch({ type: "canvasAddAnt", ant });
   }
 
   return (

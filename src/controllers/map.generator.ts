@@ -1,7 +1,7 @@
 export class MapGenerator {
   //mock up for now
-  width: number = 20;
-  height: number = 20;
+  width: number = 25;
+  height: number = 25;
 
   generateTestMap = () => {
     const nodes = this._generateTestMapNode();

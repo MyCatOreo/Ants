@@ -5,6 +5,7 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
   const { edges, nodes } = mapGenerator.generateTestMap(); //TODO: seperate pheromone from this output
   const startNode = nodes[Math.floor(Math.random() * nodes.length)]; //TODO: move into map generator
   const targetNode = nodes[Math.floor(Math.random() * nodes.length)];
+  const { lab, simulator } = state;
 
   dispatch({ type: "consoleClear" });
   dispatch({
@@ -22,17 +23,10 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
     }
   });
 
-  const alpha = 1;
-  const beta = 1;
-  const Q = 1;
-  const rho = 0.2;
-  const numAnt = 10;
-  const numInteration = 20;
-
   let totalFood = 0;
 
   //init ants for simulation
-  const ants: Ant[] = Array.from(Array(numAnt).keys()).map(id => ({
+  const ants: Ant[] = Array.from(Array(simulator.numAnt).keys()).map(id => ({
     id,
     x: 25,
     y: 25,
@@ -90,11 +84,12 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
       }
 
       const numerator =
-        Math.pow(pheromone, alpha) * Math.pow(1 / distance, beta);
+        Math.pow(pheromone, lab.alpha) * Math.pow(1 / distance, lab.beta);
       const denominator = allowedEdges
         .map(
           edge =>
-            Math.pow(edge.pheromone, alpha) * Math.pow(1 / edge.distance, beta)
+            Math.pow(edge.pheromone, lab.alpha) *
+            Math.pow(1 / edge.distance, lab.beta)
         )
         .reduce((sum, current) => sum + current, 0);
 
@@ -106,14 +101,14 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
 
   //update pheromon on an edge
   const _updateT = (edge: MapEdge, ants: Ant[]) => {
-    edge.pheromone = edge.pheromone * (1 - rho);
+    edge.pheromone = edge.pheromone * (1 - lab.rho);
 
     ants.forEach(ant => {
       //all ants that has passed this edge
       const lastEdge = _getEdge(ant.path!.slice(-1)[0], ant.path!.slice(-2)[0]); //TODO: remove after refactor ant
       if (lastEdge === edge) {
         // edge.pheromone = edge.pheromone + (Q * (ant.food ? 2 : 1)) / edge.d;
-        edge.pheromone = edge.pheromone + Q / edge.distance;
+        edge.pheromone = edge.pheromone + lab.q / edge.distance;
       }
     });
   };
@@ -180,9 +175,9 @@ export function simulate(state: AppState, dispatch: AppDispatch) {
       edges.forEach(edge => {
         _updateT(edge, ants);
       });
-      if (counter < numInteration) {
+      if (counter < simulator.numIteration) {
         simulate();
-      } else if (counter === numInteration) {
+      } else if (counter === simulator.numIteration) {
         // Print result after simulation
         ants.forEach(ant => {
           let message = "K" + ant.id + ": ";

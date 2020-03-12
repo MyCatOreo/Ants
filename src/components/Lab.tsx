@@ -16,8 +16,8 @@ import RandomAnt from "./RandomAnt";
 import Simulate from "./Simulate";
 
 const Lab: React.FC = () => {
-  const { lab, simulator } = useAppState();
   const [appState, appDispatch] = useAppReducer();
+  const { lab, simulator } = appState;
   const [expanded, setExpanded] = useState(false);
 
   const useStyles = makeStyles(theme => ({
@@ -46,7 +46,7 @@ const Lab: React.FC = () => {
     setExpanded(!expanded);
   };
 
-  //search me: handleInputChane
+  //TODO : handleInputChane
   const handleNumAntChange = (event: any) => {
     appDispatch({ type: "setNumAnt", payload: event.target.value });
   };
